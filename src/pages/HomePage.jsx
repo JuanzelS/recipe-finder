@@ -14,10 +14,10 @@ const HomePage = () => {
   }, [dispatch]);
   
   return (
-    <div className="home-page">
-      <div className="hero-section">
-        <h1>Recipe Finder</h1>
-        <p>Find delicious recipes from around the world</p>
+    <div className="container mx-auto px-4 pt-6">
+      <div className="bg-white rounded-lg py-12 px-6 mb-8 text-center shadow-card">
+        <h1 className="text-4xl font-bold text-primary mb-4">Recipe Finder</h1>
+        <p className="text-xl text-gray-600">Find delicious recipes from around the world</p>
       </div>
       
       <SearchForm />

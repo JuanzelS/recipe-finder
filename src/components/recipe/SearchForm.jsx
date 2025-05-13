@@ -75,29 +75,33 @@ const SearchForm = () => {
   };
   
   return (
-    <div className="search-form-container">
-      <h2>Find Your Next Meal</h2>
-      <form onSubmit={handleSubmit} className="search-form">
-        <div className="form-group">
-          <label htmlFor="search-query">Search by Recipe Name</label>
+    <div className="bg-white rounded-lg p-6 mb-8 shadow-card">
+      <h2 className="text-2xl font-semibold text-center mb-4">Find Your Next Meal</h2>
+      <form onSubmit={handleSubmit} className="grid md:grid-cols-3 gap-4">
+        <div className="mb-4">
+          <label htmlFor="search-query" className="block mb-2 font-medium">
+            Search by Recipe Name
+          </label>
           <input
             type="text"
             id="search-query"
             placeholder="Enter recipe name..."
             value={localSearchQuery}
             onChange={handleSearchChange}
-            className="search-input"
+            className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
         
-        <div className="form-group">
-          <label htmlFor="category">Filter by Category</label>
+        <div className="mb-4">
+          <label htmlFor="category" className="block mb-2 font-medium">
+            Filter by Category
+          </label>
           <select
             id="category"
             name="category"
             value={filters.category}
             onChange={handleFilterChange}
-            className="filter-select"
+            className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             <option value="">All Categories</option>
             {categories.map((category) => (
@@ -108,14 +112,16 @@ const SearchForm = () => {
           </select>
         </div>
         
-        <div className="form-group">
-          <label htmlFor="area">Filter by Cuisine</label>
+        <div className="mb-4">
+          <label htmlFor="area" className="block mb-2 font-medium">
+            Filter by Cuisine
+          </label>
           <select
             id="area"
             name="area"
             value={filters.area}
             onChange={handleFilterChange}
-            className="filter-select"
+            className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           >
             <option value="">All Cuisines</option>
             {areas.map((area) => (
@@ -126,13 +132,17 @@ const SearchForm = () => {
           </select>
         </div>
         
-        <div className="form-buttons">
-          <button type="submit" className="btn-search" disabled={isLoading}>
+        <div className="md:col-span-3 flex space-x-4">
+          <button 
+            type="submit" 
+            className="flex-1 bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading}
+          >
             {isLoading ? 'Loading...' : 'Search Recipes'}
           </button>
           <button 
             type="button" 
-            className="btn-reset" 
+            className="bg-gray-200 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleReset}
             disabled={isLoading}
           >
