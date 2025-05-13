@@ -5,6 +5,7 @@ import { fetchRecipeById } from '../../features/recipes/recipeThunks';
 import { addToFavorites, removeFromFavorites } from '../../features/favorites/favoritesSlice';
 import Loader from '../common/Loader';
 import ErrorMessage from '../common/ErrorMessage';
+import { motion } from 'framer-motion';
 
 const RecipeDetail = () => {
   const { id } = useParams();
@@ -86,9 +87,12 @@ const RecipeDetail = () => {
   // Render error state
   if (status === 'failed') {
     return (
-      <div className="recipe-detail-error">
+      <div className="bg-white rounded-lg shadow-md p-6">
         <ErrorMessage message={error || 'Failed to load recipe'} />
-        <button onClick={handleGoBack} className="btn-back">
+        <button 
+          onClick={handleGoBack} 
+          className="mt-4 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg flex items-center"
+        >
           &larr; Go Back
         </button>
       </div>
@@ -98,9 +102,12 @@ const RecipeDetail = () => {
   // Render empty state
   if (!selectedRecipe) {
     return (
-      <div className="recipe-detail-empty">
-        <p>Recipe not found.</p>
-        <button onClick={handleGoBack} className="btn-back">
+      <div className="bg-white rounded-lg shadow-md p-6 text-center">
+        <p className="text-lg mb-4">Recipe not found.</p>
+        <button 
+          onClick={handleGoBack} 
+          className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg flex items-center mx-auto"
+        >
           &larr; Go Back
         </button>
       </div>
@@ -111,97 +118,141 @@ const RecipeDetail = () => {
   const instructionSteps = formatInstructions(selectedRecipe.strInstructions);
   
   return (
-    <div className="recipe-detail">
-      <div className="recipe-detail-header">
-        <button onClick={handleGoBack} className="btn-back">
+    <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
+      <div className="flex flex-col sm:flex-row justify-between mb-8 gap-4">
+        <button 
+          onClick={handleGoBack} 
+          className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg flex items-center"
+        >
           &larr; Back to Recipes
         </button>
-        <button 
-          className={`btn-favorite ${isFavorite ? 'is-favorite' : ''}`}
+        <motion.button 
+          className={`${isFavorite ? 'bg-red-100 text-primary' : 'bg-gray-200 text-gray-700'} py-2 px-4 rounded-lg`}
           onClick={handleFavoriteToggle}
+          whileTap={{ scale: 0.95 }}
         >
           {isFavorite ? '❤️ Remove from Favorites' : '🤍 Add to Favorites'}
-        </button>
+        </motion.button>
       </div>
       
-      <div className="recipe-detail-content">
-        <div className="recipe-detail-image">
+      <div className="grid md:grid-cols-5 gap-8">
+        <motion.div 
+          className="md:col-span-2"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <img 
             src={selectedRecipe.strMealThumb} 
             alt={selectedRecipe.strMeal} 
+            className="w-full rounded-lg shadow-md"
           />
-        </div>
+        </motion.div>
         
-        <div className="recipe-detail-info">
-          <h1 className="recipe-title">{selectedRecipe.strMeal}</h1>
+        <motion.div 
+          className="md:col-span-3"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <h1 className="text-3xl font-bold mb-4">{selectedRecipe.strMeal}</h1>
           
-          <div className="recipe-meta">
+          <div className="flex flex-wrap gap-2 mb-4">
             {selectedRecipe.strCategory && (
-              <span className="recipe-category">
+              <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm">
                 Category: {selectedRecipe.strCategory}
               </span>
             )}
             
             {selectedRecipe.strArea && (
-              <span className="recipe-area">
+              <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm">
                 Cuisine: {selectedRecipe.strArea}
               </span>
             )}
             
             {selectedRecipe.strTags && (
-              <div className="recipe-tags">
+              <div className="w-full mt-2 text-gray-600 text-sm">
                 Tags: {selectedRecipe.strTags.split(',').map(tag => tag.trim()).join(', ')}
               </div>
             )}
           </div>
           
           {selectedRecipe.strYoutube && (
-            <div className="recipe-video">
+            <div className="mb-6">
               <a 
                 href={selectedRecipe.strYoutube} 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="video-link"
+                className="text-primary font-medium hover:text-primary-dark transition-colors flex items-center"
               >
-                Watch Video Tutorial
+                <span className="mr-2">▶️</span> Watch Video Tutorial
               </a>
             </div>
           )}
           
-          <div className="recipe-ingredients">
-            <h2>Ingredients</h2>
-            <ul>
+          <motion.div 
+            className="mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <h2 className="text-xl font-semibold mb-3">Ingredients</h2>
+            <ul className="divide-y divide-gray-200">
               {ingredients.map((item, index) => (
-                <li key={index}>
-                  <span className="ingredient">{item.ingredient}</span>
-                  <span className="measure">{item.measure}</span>
-                </li>
+                <motion.li 
+                  key={index}
+                  className="flex justify-between py-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + index * 0.05 }}
+                >
+                  <span className="font-medium">{item.ingredient}</span>
+                  <span className="text-gray-600">{item.measure}</span>
+                </motion.li>
               ))}
             </ul>
-          </div>
+          </motion.div>
           
-          <div className="recipe-instructions">
-            <h2>Instructions</h2>
-            <ol>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            <h2 className="text-xl font-semibold mb-3">Instructions</h2>
+            <ol className="list-decimal pl-5 space-y-3">
               {instructionSteps.map((step, index) => (
-                <li key={index}>{step}</li>
+                <motion.li 
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 + index * 0.05 }}
+                  className="text-gray-700"
+                >
+                  {step}
+                </motion.li>
               ))}
             </ol>
-          </div>
+          </motion.div>
           
           {selectedRecipe.strSource && (
-            <div className="recipe-source">
-              <h3>Source</h3>
+            <motion.div 
+              className="mt-8 pt-6 border-t border-gray-200"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+            >
+              <h3 className="font-semibold mb-2">Source</h3>
               <a 
                 href={selectedRecipe.strSource} 
                 target="_blank"
                 rel="noopener noreferrer"
+                className="text-primary hover:text-primary-dark break-words"
               >
                 {selectedRecipe.strSource}
               </a>
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

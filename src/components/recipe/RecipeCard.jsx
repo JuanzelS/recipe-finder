@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { addToFavorites, removeFromFavorites } from '../../features/favorites/favoritesSlice';
 
 const RecipeCard = ({ recipe }) => {
@@ -26,12 +27,23 @@ const RecipeCard = ({ recipe }) => {
   };
   
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-hover">
+    <motion.div 
+      className="bg-white rounded-lg overflow-hidden shadow-card"
+      whileHover={{ 
+        y: -10,
+        boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" 
+      }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="h-48 overflow-hidden">
-        <img 
+        <motion.img 
           src={recipe.strMealThumb} 
           alt={recipe.strMeal} 
-          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+          className="w-full h-full object-cover"
+          whileHover={{ scale: 1.1 }}
+          transition={{ duration: 0.5 }}
         />
       </div>
       <div className="p-5">
@@ -53,15 +65,16 @@ const RecipeCard = ({ recipe }) => {
           >
             View Recipe
           </Link>
-          <button 
+          <motion.button 
             className={`p-2 rounded-lg transition-colors ${isFavorite ? 'bg-red-100 text-primary' : 'bg-gray-200 text-gray-700'}`}
             onClick={handleFavoriteToggle}
+            whileTap={{ scale: 0.9 }}
           >
             {isFavorite ? '❤️' : '🤍'}
-          </button>
+          </motion.button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
